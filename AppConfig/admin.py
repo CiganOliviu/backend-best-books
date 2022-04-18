@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from AppConfig.models import Schema, AppLayout
+
+admin.site.register(Schema)
+admin.site.register(AppLayout)
