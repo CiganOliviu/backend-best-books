@@ -3,19 +3,19 @@ from rest_framework import serializers
 from Books.models import Categorie, Nationalitie, Author, Book
 
 
-class CategoriesSerializer(serializers.ModelSerializer): # noqa
+class CategoriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Categorie
         fields = '__all__'
 
 
-class NationalitiesSerializer(serializers.ModelSerializer): # noqa
+class NationalitiesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Nationalitie
         fields = '__all__'
 
 
-class AuthorsSerializer(serializers.ModelSerializer): # noqa
+class AuthorsSerializer(serializers.ModelSerializer):
     nationality = NationalitiesSerializer(read_only=True)
 
     class Meta:
@@ -23,7 +23,7 @@ class AuthorsSerializer(serializers.ModelSerializer): # noqa
         fields = '__all__'
 
 
-class BooksSerializer(serializers.ModelSerializer): # noqa
+class BooksSerializer(serializers.ModelSerializer):
     author = AuthorsSerializer(read_only=True)
     category = CategoriesSerializer(read_only=True)
 
