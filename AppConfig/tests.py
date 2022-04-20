@@ -25,17 +25,16 @@ class TestDataResponse(APITestCase):
             route='/index',
             name='index'
         )
-        self.expected_json_response = {
+
+    def test_schemas_response_data(self):
+        expected_json_response = {
             'id': 1,
             'route': '/index',
             'name': 'index'
         }
 
-    def test_schemas_response_data(self):
         response = self.client.get(self.path_builder.build_schemas_url(), format='json',
                                    content_type='application/json')
-
         response_data_as_json = json.dumps(response.data[0], sort_keys=True)
-        expected_response_data_as_json = json.dumps(self.expected_json_response, sort_keys=True)
-
+        expected_response_data_as_json = json.dumps(expected_json_response, sort_keys=True)
         self.assertEqual(response_data_as_json, expected_response_data_as_json)

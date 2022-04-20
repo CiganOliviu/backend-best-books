@@ -10,7 +10,7 @@ urlpatterns = [
     path('nationalities-lister/<int:pk>', views.NationalitiesDetails.as_view(), name='NationalitiesDetails'),
     path('authors-lister/', views.AuthorsLister.as_view(), name='AuthorsLister'),
     path('authors-lister/<int:pk>', views.AuthorsDetails.as_view(), name='AuthorsDetails'),
-    path('books-lister/', views.AuthorsLister.as_view(), name='AuthorsLister'),
-    path('books-lister/<int:pk>', views.AuthorsDetails.as_view(), name='AuthorsDetails'),
+    path('books-lister/', views.BooksLister.as_view(), name='AuthorsLister'),
+    path('books-lister/<int:pk>', views.BooksDetails.as_view(), name='AuthorsDetails'),
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)

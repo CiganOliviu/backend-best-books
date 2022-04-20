@@ -1,7 +1,9 @@
 from rest_framework import status
 from rest_framework.test import APITestCase, RequestsClient
+from rest_framework.utils import json
 
 from BackendBestBooks.tests_dependencies import PathsBuilder
+from Books.models import Nationalitie, Categorie, Author, Book
 
 
 class TestStatusResponse(APITestCase):
@@ -31,4 +33,115 @@ class TestStatusResponse(APITestCase):
 
 
 class TestDataResponse(APITestCase):
-    pass
+    def setUp(self):
+        self.path_builder = PathsBuilder()
+
+        Nationalitie.objects.create(
+            name='American'
+        )
+
+        Categorie.objects.create(
+            name='Business'
+        )
+
+        Author.objects.create(
+            profile='authors-profile-images/default.jpg',
+            first_name='Bob',
+            last_name='Martin',
+            age='69',
+            nationality=Nationalitie.objects.get(id=1),
+            occupation='Software Engineer',
+            website='www.cleancoder.com'
+        )
+
+        Book.objects.create(
+            author=Author.objects.get(id=1),
+            title='Clean Code',
+            description='Simple description',
+            mark=10,
+            cover='books-cover-images/default.jpg',
+            current_market_price='300',
+            pages='456',
+            category=Categorie.objects.get(id=1),
+            owned=True
+        )
+
+    def test_nationalities_response_data(self):
+        expected_json_response = {
+            'id': 1,
+            'name': 'American'
+        }
+
+        response = self.client.get(self.path_builder.build_nationalities_url(), format='json',
+                                   content_type='application/json')
+        response_data_as_json = json.dumps(response.data[0], sort_keys=True)
+        expected_response_data_as_json = json.dumps(expected_json_response, sort_keys=True)
+        self.assertEqual(response_data_as_json, expected_response_data_as_json)
+
+    def test_categories_response_data(self):
+        expected_json_response = {
+            'id': 1,
+            'name': 'Business'
+        }
+
+        response = self.client.get(self.path_builder.build_categories_url(), format='json',
+                                   content_type='application/json')
+        response_data_as_json = json.dumps(response.data[0], sort_keys=True)
+        expected_response_data_as_json = json.dumps(expected_json_response, sort_keys=True)
+        self.assertEqual(response_data_as_json, expected_response_data_as_json)
+
+    def test_authors_response_data(self):
+        expected_json_response = {
+            'id': 1,
+            'profile': '/MEDIA/authors-profile-images/default.jpg',
+            'first_name': 'Bob',
+            'last_name': 'Martin',
+            'age': '69',
+            'nationality': {
+                'id': 1,
+                'name': 'American'
+            },
+            'occupation': 'Software Engineer',
+            'website': 'www.cleancoder.com'
+        }
+
+        response = self.client.get(self.path_builder.build_authors_url(), format='json',
+                                   content_type='application/json')
+        response_data_as_json = json.dumps(response.data[0], sort_keys=True)
+        expected_response_data_as_json = json.dumps(expected_json_response, sort_keys=True)
+        self.assertEqual(response_data_as_json, expected_response_data_as_json)
+
+    def test_books_response_data(self):
+        expected_json_response = {
+            'id': 1,
+            'author': {
+                'id': 1,
+                'profile': '/MEDIA/authors-profile-images/default.jpg',
+                'first_name': 'Bob',
+                'last_name': 'Martin',
+                'age': '69',
+                'nationality': {
+                    'id': 1,
+                    'name': 'American'
+                },
+                'occupation': 'Software Engineer',
+                'website': 'www.cleancoder.com'
+            },
+            'title': 'Clean Code',
+            'description': 'Simple description',
+            'mark': '10',
+            'cover': '/MEDIA/books-cover-images/default.jpg',
+            'current_market_price': '300',
+            'pages': '456',
+            'category': {
+                'id': 1,
+                'name': 'Business',
+            },
+            'owned': True
+        }
+
+        response = self.client.get(self.path_builder.build_books_url(), format='json',
+                                   content_type='application/json')
+        response_data_as_json = json.dumps(response.data[0], sort_keys=True)
+        expected_response_data_as_json = json.dumps(expected_json_response, sort_keys=True)
+        self.assertEqual(response_data_as_json, expected_response_data_as_json)
