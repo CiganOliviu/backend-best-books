@@ -55,7 +55,6 @@ class TestDataResponse(APITestCase):
         )
 
         Book.objects.create(
-            author=Author.objects.get(id=1),
             title='Clean Code',
             description='Simple description',
             mark=10,
@@ -63,8 +62,13 @@ class TestDataResponse(APITestCase):
             current_market_price='300',
             pages='456',
             category=Categorie.objects.get(id=1),
-            owned=True
+            virtually_owned=True,
+            physically_owned=False
         )
+
+        authors = Author.objects.all()
+        book = Book.objects.get(id=1)
+        book.authors.add(*authors)
 
     def test_nationalities_response_data(self):
         expected_json_response = {
@@ -114,19 +118,19 @@ class TestDataResponse(APITestCase):
     def test_books_response_data(self):
         expected_json_response = {
             'id': 1,
-            'author': {
-                'id': 1,
-                'profile': '/MEDIA/authors-profile-images/default.jpg',
-                'first_name': 'Bob',
-                'last_name': 'Martin',
-                'age': '69',
-                'nationality': {
+            'authors': [{
                     'id': 1,
-                    'name': 'American'
-                },
-                'occupation': 'Software Engineer',
-                'website': 'www.cleancoder.com'
-            },
+                    'profile': '/MEDIA/authors-profile-images/default.jpg',
+                    'first_name': 'Bob',
+                    'last_name': 'Martin',
+                    'age': '69',
+                    'nationality': {
+                        'id': 1,
+                        'name': 'American'
+                    },
+                    'occupation': 'Software Engineer',
+                    'website': 'www.cleancoder.com'
+            }],
             'title': 'Clean Code',
             'description': 'Simple description',
             'mark': '10',
@@ -137,7 +141,8 @@ class TestDataResponse(APITestCase):
                 'id': 1,
                 'name': 'Business',
             },
-            'owned': True
+            'virtually_owned': True,
+            'physically_owned': False
         }
 
         response = self.client.get(self.path_builder.build_books_url(), format='json',

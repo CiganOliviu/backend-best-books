@@ -29,15 +29,16 @@ class Author(models.Model):
 
 
 class Book(models.Model):
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    authors = models.ManyToManyField(Author, default=None)
     title = models.CharField(max_length=150, default=None)
     description = models.TextField(default=None)
     mark = models.CharField(max_length=2, default=None)
     cover = models.ImageField(upload_to='books-cover-images/', default='books-cover-images/default.jpg')
-    current_market_price = models.CharField(max_length=2, default=None)
+    current_market_price = models.CharField(max_length=3, default=None)
     pages = models.CharField(max_length=3, default=None)
     category = models.ForeignKey(Categorie, on_delete=models.CASCADE)
-    owned = models.BooleanField(default=False)
+    virtually_owned = models.BooleanField(default=False)
+    physically_owned = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
