@@ -5,6 +5,7 @@ class PathsBuilder:
         self.__STANDARD_APPCONFIG_APP_PATH = 'config/'
         self.__CATEGORIES_URL = 'categories-lister/'
         self.__NATIONALITIES_URL = 'nationalities-lister/'
+        self.__FIELDS_URL = 'fields-lister/'
         self.__AUTHORS_URL = 'authors-lister/'
         self.__BOOKS_URL = 'books-lister/'
         self.__SCHEMAS_URL = 'schemas-lister/'
@@ -23,3 +24,6 @@ class PathsBuilder:
 
     def build_schemas_url(self):
         return self.__STANDARD_BACKEND_URL + self.__STANDARD_APPCONFIG_APP_PATH + self.__SCHEMAS_URL
+
+    def build_fields_url(self):
+        return self.__STANDARD_BACKEND_URL + self.__STANDARD_BOOKS_APP_PATH + self.__FIELDS_URL

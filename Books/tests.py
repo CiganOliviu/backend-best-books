@@ -3,7 +3,7 @@ from rest_framework.test import APITestCase, RequestsClient
 from rest_framework.utils import json
 
 from BackendBestBooks.tests_dependencies import PathsBuilder
-from Books.models import Nationalitie, Categorie, Author, Book
+from Books.models import Nationalitie, Categorie, Author, Book, Field
 
 
 class TestStatusResponse(APITestCase):
@@ -18,6 +18,11 @@ class TestStatusResponse(APITestCase):
 
     def test_nationalities_response(self):
         path = self.path_builder.build_nationalities_url()
+        response = self.client.get(path)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_fields_response(self):
+        path = self.path_builder.build_fields_url()
         response = self.client.get(path)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -44,13 +49,17 @@ class TestDataResponse(APITestCase):
             name='Business'
         )
 
+        Field.objects.create(
+            name='Software Engineering'
+        )
+
         Author.objects.create(
             profile='authors-profile-images/default.jpg',
             first_name='Bob',
             last_name='Martin',
             age='69',
             nationality=Nationalitie.objects.get(id=1),
-            occupation='Software Engineer',
+            field=Field.objects.get(id=1),
             website='www.cleancoder.com'
         )
 
@@ -94,6 +103,18 @@ class TestDataResponse(APITestCase):
         expected_response_data_as_json = json.dumps(expected_json_response, sort_keys=True)
         self.assertEqual(response_data_as_json, expected_response_data_as_json)
 
+    def test_fields_response_data(self):
+        expected_json_response = {
+            'id': 1,
+            'name': 'Software Engineering'
+        }
+
+        response = self.client.get(self.path_builder.build_fields_url(), format='json',
+                                   content_type='application/json')
+        response_data_as_json = json.dumps(response.data[0], sort_keys=True)
+        expected_response_data_as_json = json.dumps(expected_json_response, sort_keys=True)
+        self.assertEqual(response_data_as_json, expected_response_data_as_json)
+
     def test_authors_response_data(self):
         expected_json_response = {
             'id': 1,
@@ -105,7 +126,10 @@ class TestDataResponse(APITestCase):
                 'id': 1,
                 'name': 'American'
             },
-            'occupation': 'Software Engineer',
+            'field': {
+                'id': 1,
+                'name': 'Software Engineering'
+            },
             'website': 'www.cleancoder.com'
         }
 
@@ -128,7 +152,10 @@ class TestDataResponse(APITestCase):
                         'id': 1,
                         'name': 'American'
                     },
-                    'occupation': 'Software Engineer',
+                    'field': {
+                        'id': 1,
+                        'name': 'Software Engineering'
+                    },
                     'website': 'www.cleancoder.com'
             }],
             'title': 'Clean Code',
