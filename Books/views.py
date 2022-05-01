@@ -3,8 +3,9 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from Books.models import Categorie, Nationalitie, Author, Book
-from Books.serializers import CategoriesSerializer, NationalitiesSerializer, AuthorsSerializer, BooksSerializer
+from Books.models import Categorie, Nationalitie, Author, Book, Field
+from Books.serializers import CategoriesSerializer, NationalitiesSerializer, AuthorsSerializer, BooksSerializer, \
+    FieldsSerializer
 
 
 class CategoriesLister(APIView):
@@ -93,6 +94,56 @@ class NationalitiesDetails(APIView):
     def put(self, request, pk):
         post = self.get_post(pk)
         serializer = NationalitiesSerializer(post, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        post = self.get_post(pk)
+        post.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class FieldsLister(APIView):
+    @staticmethod
+    def get(request):
+        data_objects = Field.objects.all()
+        serializer = FieldsSerializer(data_objects, many=True)
+
+        return Response(serializer.data)
+
+    @staticmethod
+    def post(request):
+        serializer = FieldsSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class FieldsDetails(APIView):
+    @staticmethod
+    def get_post(pk):
+        try:
+            return Field.objects.get(pk=pk)
+        except Field.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        post = self.get_post(pk)
+        serializer = FieldsSerializer(post)
+
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        post = self.get_post(pk)
+        serializer = FieldsSerializer(post, data=request.data)
 
         if serializer.is_valid():
             serializer.save()
