@@ -16,4 +16,3 @@ admin.site.register(Nationalitie)
 admin.site.register(Field)
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(Book, BookAdmin)
-
