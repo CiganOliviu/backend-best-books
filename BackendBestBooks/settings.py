@@ -129,7 +129,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'MEDIA')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_WHITELIST = [
-    '*'
+    # '*'
 ]
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
