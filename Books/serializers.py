@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from Books.models import Categorie, Nationalitie, Author, Book
+from Books.models import Categorie, Nationalitie, Author, Book, Field
 
 
 class CategoriesSerializer(serializers.ModelSerializer):
@@ -15,8 +15,15 @@ class NationalitiesSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class FieldsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Field
+        fields = '__all__'
+
+
 class AuthorsSerializer(serializers.ModelSerializer):
     nationality = NationalitiesSerializer(read_only=True)
+    field = FieldsSerializer(read_only=True)
 
     class Meta:
         model = Author
@@ -24,7 +31,7 @@ class AuthorsSerializer(serializers.ModelSerializer):
 
 
 class BooksSerializer(serializers.ModelSerializer):
-    author = AuthorsSerializer(read_only=True)
+    authors = AuthorsSerializer(many=True)
     category = CategoriesSerializer(read_only=True)
 
     class Meta:

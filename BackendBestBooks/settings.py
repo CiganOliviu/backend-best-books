@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     'AppConfig',
     'corsheaders',
     'rest_framework',
+    "admin_interface",
+    "colorfield",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -133,3 +135,5 @@ CORS_ORIGIN_WHITELIST = [
 ]
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+X_FRAME_OPTIONS = "SAMEORIGIN"
+SILENCED_SYSTEM_CHECKS = ["security.W019"]
