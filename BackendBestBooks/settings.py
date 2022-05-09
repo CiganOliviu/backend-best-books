@@ -137,4 +137,4 @@ CORS_ORIGIN_WHITELIST = [
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 X_FRAME_OPTIONS = "SAMEORIGIN"
 SILENCED_SYSTEM_CHECKS = ["security.W019"]
-CSRF_TRUSTED_ORIGINS=['https://backend-best-books.azurewebsites.net/']
+CSRF_TRUSTED_ORIGINS = ['https://backend-best-books.azurewebsites.net']
