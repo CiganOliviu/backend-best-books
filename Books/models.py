@@ -38,7 +38,7 @@ class Author(models.Model):
 
 class Book(models.Model):
     authors = models.ManyToManyField(Author, default=None)
-    title = models.CharField(max_length=150, default=None)
+    title = models.CharField(max_length=150, default=None, unique=True)
     description = models.TextField(default=None)
     mark = models.CharField(max_length=2, default=None)
     cover = models.ImageField(upload_to='books-cover-images/', default='books-cover-images/default.jpg')
